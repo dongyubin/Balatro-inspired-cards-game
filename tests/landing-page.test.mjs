@@ -175,7 +175,7 @@ test("keeps the game directly playable and documents a gameplay concept image", 
   );
   assert.match(
     html,
-    /<iframe[\s\S]*?src="https:\/\/753acdb5-7e64-4e40-8280-0a3c74f37166--1781222400--bf61c6ba\.app\.yourware\.app\/?"/
+    /<iframe[\s\S]*?src="https:\/\/753acdb5-7e64-4e40-8280-0a3c74f37166--\d+--[a-z0-9]+\.app\.yourware\.app\/?"/
   );
   assert.match(html, /<img[^>]+src="\/gameplay-screenshot\.webp"[^>]+width="1200"[^>]+height="675"/);
   assert.match(html, /alt="[^"]*Balatrio[^"]*gameplay[^"]*"/i);
@@ -240,4 +240,27 @@ test("loads critical page styles directly without waiting for JavaScript", async
   const config = await source("vite.config.js");
   assert.match(config, /inject-critical-first-paint/);
   assert.match(config, /data-critical-css/);
+});
+
+test("provides an accessible site-wide back-to-top control", async () => {
+  const pages = [
+    "index.html",
+    "how-to-play/index.html",
+    "about/index.html",
+    "privacy/index.html",
+    "terms/index.html",
+    "changelog/index.html"
+  ];
+  const javascript = await source("src/main.js");
+  const css = await source("src/style.css");
+
+  for (const path of pages) {
+    const html = await source(path);
+    assert.match(html, /<button[^>]+class="back-to-top"[^>]+aria-label="Back to top"[^>]+data-back-to-top/);
+  }
+
+  assert.match(javascript, /window\.scrollTo\(\{[\s\S]*?top:\s*0/);
+  assert.match(javascript, /reduceMotion\s*\?\s*"auto"\s*:\s*"smooth"/);
+  assert.match(css, /\.back-to-top\s*\{/);
+  assert.match(css, /\.back-to-top\.is-visible\s*\{/);
 });

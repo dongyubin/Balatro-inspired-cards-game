@@ -111,6 +111,53 @@ strong {
   transform: translateY(0);
 }
 
+.back-to-top {
+  position: fixed;
+  right: clamp(18px, 2.5vw, 36px);
+  bottom: clamp(18px, 2.5vw, 36px);
+  z-index: 120;
+  display: grid;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  place-items: center;
+  border: 1px solid rgba(255, 101, 39, 0.45);
+  border-radius: 14px;
+  color: var(--orange-bright);
+  background: rgba(17, 20, 27, 0.88);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(14px);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(14px) scale(0.92);
+  transition:
+    opacity 180ms ease,
+    visibility 180ms ease,
+    transform 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease;
+}
+
+.back-to-top span {
+  font-family: "Pixel UI", monospace;
+  font-size: 23px;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+.back-to-top:hover {
+  border-color: var(--orange-bright);
+  color: #fff;
+  background: var(--orange);
+}
+
+.back-to-top.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
 .site-header {
   position: fixed;
   top: 0;

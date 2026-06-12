@@ -27,6 +27,25 @@ window.addEventListener("scroll", updateHeader, { passive: true });
 
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const reveals = document.querySelectorAll(".reveal");
+const backToTop = document.querySelector("[data-back-to-top]");
+
+function updateBackToTop() {
+  if (!backToTop) return;
+  const visible = window.scrollY > Math.max(360, window.innerHeight * 0.5);
+  backToTop.classList.toggle("is-visible", visible);
+  backToTop.tabIndex = visible ? 0 : -1;
+}
+
+if (backToTop) {
+  updateBackToTop();
+  window.addEventListener("scroll", updateBackToTop, { passive: true });
+  backToTop.addEventListener("click", () => {
+    window.scrollTo({
+      top: 0,
+      behavior: reduceMotion ? "auto" : "smooth"
+    });
+  });
+}
 
 if (reduceMotion || !("IntersectionObserver" in window)) {
   reveals.forEach((element) => element.classList.add("is-visible"));
